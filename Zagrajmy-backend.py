@@ -2,13 +2,9 @@ import os
 
 from flask import Flask
 from flask import abort, jsonify
-import datetime
-import time
-
-from flask import flash
 from flask import request
 from flask import send_file
-
+from initial_db import *
 app = Flask(__name__)
 
 
@@ -17,22 +13,12 @@ def hello_world():
     return 'Hello World!'
 
 
-s = "01/12/2011"
-
-users = [
-    {'id': 1, 'name': 'Jerzy'},
-    {'id': 2, 'name': 'Marian'},
-    {'id': 3, 'name': 'Grzegorz'},
-    {'id': 4, 'name': 'Franciszek'}
-]
-
-matches = [
-    {'id': 1, 'title': "asdfadfgsdfg", 'date': time.mktime(datetime.datetime.strptime(s, "%d/%m/%Y").timetuple())},
-    {'id': 2, 'title': "456wtry", 'date': time.mktime(datetime.datetime.strptime(s, "%d/%m/%Y").timetuple())},
-    {'id': 3, 'title': "po;'0;il;", 'date': time.mktime(datetime.datetime.strptime(s, "%d/%m/%Y").timetuple())},
-    {'id': 4, 'title': "hkjghkhjk", 'date': time.mktime(datetime.datetime.strptime(s, "%d/%m/%Y").timetuple())},
-    {'id': 5, 'title': "q345324", 'date': time.mktime(datetime.datetime.strptime(s, "%d/%m/%Y").timetuple())}
-]
+# @app.route('/matches/<int:match_id>/users', methods=['GET'])
+# def get_match_participants(match_id):
+#     user = [user for user in users if user['id'] == match_id]
+#     if len(user) == 0:
+#         abort(404)
+#     return jsonify(user[0])
 
 
 @app.route('/images/<int:image_id>', methods=['PUT'])
