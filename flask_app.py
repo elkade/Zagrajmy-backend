@@ -87,9 +87,13 @@ def get_matches():
 @app.route('/matches', methods=['POST'])
 def post_match():
     match = {
+        'authorId': request.json.get('authorId'),
+        'latLng': {'latitude': request.json.get('latLng')['latitude'],
+                   'longitude': request.json.get('latLng')['longitude']},
         'title': request.json.get('title'),
         'date': request.json.get('date'),
-        'id': max(matches, key=lambda x: x['id'])['id'] + 1
+        'limit': request.json.get('limit'),
+        'id': 0 if not matches else max(matches, key=lambda x: x['id'])['id'] + 1
     }
 
     matches.append(match)
