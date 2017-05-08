@@ -5,6 +5,7 @@ from flask import abort, jsonify
 from flask import request
 from flask import send_file
 from initial_db import *
+
 app = Flask(__name__)
 
 
@@ -28,7 +29,7 @@ def put_image(image_id):
     file = request.files['file']
     extension = os.path.splitext(file.filename)[1]
     f_name = str(image_id)
-    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'images', f_name)
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'images', f_name)
     try:
         os.remove(path)
     except:
@@ -40,7 +41,7 @@ def put_image(image_id):
 @app.route('/images/<int:image_id>', methods=['GET'])
 def get_image(image_id):
     try:
-        path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'images', str(image_id))
+        path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'images', str(1))  # str(image_id))
         return send_file(path, mimetype='image/jpeg')
     except:
         abort(404)
@@ -64,11 +65,21 @@ def get_users():
 def post_user():
     user = {
         'name': request.json.get('name'),
-        'id': max(users, key=lambda x: x['id'])['id'] + 1
+        'id': 0 if not matches else max(users, key=lambda x: x['id'])['id'] + 1
     }
 
     users.append(user)
     return jsonify(user)
+
+
+@app.route('/users/<int:user_id>', methods=['PUT'])
+def put_user(user_id):
+    user = [u for u in users if u['id'] == user_id]
+    if not user:
+        abort()
+    user[0]['name'] = request.json.get('name')
+
+    return jsonify(user[0])
 
 
 @app.route('/matches/<int:match_id>', methods=['GET'])
