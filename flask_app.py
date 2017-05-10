@@ -104,11 +104,41 @@ def post_match():
         'title': request.json.get('title'),
         'date': request.json.get('date'),
         'limit': request.json.get('limit'),
-        'id': 0 if not matches else max(matches, key=lambda x: x['id'])['id'] + 1
+        'id': 0 if not matches else max(matches, key=lambda x: x['id'])['id'] + 1,
+        'participantsIds': []
     }
 
     matches.append(match)
     return jsonify(match)
+
+
+@app.route('/matches/<int:match_id>/participants/<int:user_id>', methods=['PUT'])
+def put_participant(match_id, user_id):
+    match = [match for match in matches if match['id'] == match_id]
+    if len(match) == 0:
+        abort(404)
+    if user_id not in match[0]['participantsIds']:
+        match[0]['participantsIds'].append(user_id)
+    return jsonify(match[0])
+
+
+@app.route('/matches/<int:match_id>/participants/<int:user_id>', methods=['DELETE'])
+def delete_participant(match_id, user_id):
+    match = [match for match in matches if match['id'] == match_id]
+    if len(match) == 0:
+        abort(404)
+    if user_id in match[0]['participantsIds']:
+        match[0]['participantsIds'].remove(user_id)
+    return jsonify(match[0])
+
+
+@app.route('/matches/<int:match_id>/participants', methods=['GET'])
+def get_participants(match_id):
+    match = [match for match in matches if match['id'] == match_id]
+    if len(match) == 0:
+        abort(404)
+    participants = [[u for u in users if u['id'] == p][0] for p in match[0]['participantsIds']]
+    return jsonify(participants)
 
 
 if __name__ == '__main__':

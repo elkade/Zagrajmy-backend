@@ -7,7 +7,9 @@ users = [
     {'id': 1, 'name': 'Jerzy'},
     {'id': 2, 'name': 'Marian'},
     {'id': 3, 'name': 'Grzegorz'},
-    {'id': 4, 'name': 'Franciszek'}
+    {'id': 4, 'name': 'Franciszek'},
+    {'id': 4, 'name': 'Ireneusz'},
+    {'id': 4, 'name': 'Romuald'}
 ]
 
 matches = [
