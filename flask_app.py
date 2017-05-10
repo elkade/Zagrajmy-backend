@@ -1,3 +1,4 @@
+import base64
 import os
 
 from flask import Flask
@@ -41,7 +42,7 @@ def put_image(image_id):
 @app.route('/images/<int:image_id>', methods=['GET'])
 def get_image(image_id):
     try:
-        path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'images', str(1))  # str(image_id))
+        path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'images',  str(image_id))
         return send_file(path, mimetype='image/jpeg')
     except:
         abort(404)
@@ -65,10 +66,11 @@ def get_users():
 def post_user():
     user = {
         'name': request.json.get('name'),
-        'id': 0 if not matches else max(users, key=lambda x: x['id'])['id'] + 1
+        'id': 0 if not users else max(users, key=lambda x: x['id'])['id'] + 1
     }
 
     users.append(user)
+    save_photo(user['id'])
     return jsonify(user)
 
 
@@ -78,8 +80,24 @@ def put_user(user_id):
     if not user:
         abort()
     user[0]['name'] = request.json.get('name')
-
+    save_photo(user_id)
     return jsonify(user[0])
+
+
+def save_photo(id):
+    photo = request.json.get('photo', None)
+    if photo is None:
+        return
+
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'images', str(id))
+    try:
+        os.remove(path)
+    except:
+        pass
+    with open(path, "wb") as g:
+        data = base64.b64decode(photo)
+        print(type(data))
+        g.write(data)
 
 
 @app.route('/matches/<int:match_id>', methods=['GET'])

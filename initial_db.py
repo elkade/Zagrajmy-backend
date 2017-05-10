@@ -8,8 +8,8 @@ users = [
     {'id': 2, 'name': 'Marian'},
     {'id': 3, 'name': 'Grzegorz'},
     {'id': 4, 'name': 'Franciszek'},
-    {'id': 4, 'name': 'Ireneusz'},
-    {'id': 4, 'name': 'Romuald'}
+    {'id': 5, 'name': 'Ireneusz'},
+    {'id': 6, 'name': 'Romuald'}
 ]
 
 matches = [
